@@ -1,0 +1,51 @@
+#!/usr/bin/env python
+
+import os
+import sys
+import gntp.notifier
+
+if __name__ == '__main__':
+  
+  # open up log to write to
+  f = open('/var/tmp/cmus.log', 'w')
+
+  # extract the data
+  data = dict(zip(sys.argv[1::2], sys.argv[2::2]))
+
+  # set a default artwork image
+  artwork = "http://example.org"
+
+  # create the title/description
+  title = "%(artist)s" % data
+  description = "%(album)s / %(tracknumber)s / %(date)s \n%(title)s" % data
+
+  # try to see if folder.jpg exists
+  try:
+    folder = os.path.dirname(data['file'])
+    if os.path.exists(folder+"/folder.jpg"):
+      artwork = file(folder+"/folder.jpg", 'r').read()
+  except TypeError as e:
+    f.write("Type Error: %s\n" % e)
+  except:
+    f.write("%s\n" % sys.exc_info()[0])
+
+  #f.write("%s\n" % artwork)
+  f.close()
+
+  # create/register the growl notifier
+  growl = gntp.notifier.GrowlNotifier(
+    applicationName = "cmus",
+    notifications = ["New Song"],
+    defaultNotifications = ["New Song"],
+  )
+  growl.register()
+
+  # notify the key press
+  growl.notify(
+    noteType = "New Song",
+    title = title,
+    description = description,
+    icon = artwork,
+    sticky = False,
+    priority = 1,
+  ) 
