@@ -5,13 +5,12 @@ import os
 import sys
 import gntp.notifier
 
-if __name__ == '__main__':
-  
+def main(argv):
   # open up log to write to
   f = open('/var/tmp/cmus.log', 'w')
 
   # extract the data
-  data = dict(zip(sys.argv[1::2], sys.argv[2::2]))
+  data = dict(zip(argv[1::2], argv[2::2]))
 
   # set a default artwork image
   artwork = "http://example.org"
@@ -50,3 +49,6 @@ if __name__ == '__main__':
     sticky = False,
     priority = 1,
   ) 
+
+if __name__ == '__main__':
+  main(sys.argv)
