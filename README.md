@@ -23,5 +23,5 @@ Usage
 $ cmus
 
 # set cmus to use cmus-growl
-:status_display_program=/where/the/script/is/located/cmus-growl
+:status_display_program=/path/to/cmus-growl
 ```
